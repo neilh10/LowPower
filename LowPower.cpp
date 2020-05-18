@@ -1119,6 +1119,66 @@ void	LowPowerClass::powerExtStandby(period_t period, adc_t adc, bod_t bod,
 	#endif
 }
 
+// sleep # of milliseconds using WDT (watchdog timer - accurate to within 10%, uses about 3uA)
+void LowPowerClass::longPowerDown(uint32_t sleepTime) {
+  do {
+    if (sleepTime > 8000)
+    {
+      powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+      sleepTime-=8000;
+    }
+    else if (sleepTime > 4000)
+    {
+      powerDown(SLEEP_4S, ADC_OFF, BOD_OFF);
+      sleepTime-=4000;
+    }
+    else if (sleepTime > 2000)
+    {
+      powerDown(SLEEP_2S, ADC_OFF, BOD_OFF);
+      sleepTime-=2000;
+    }
+    else if (sleepTime > 1000)
+    {
+      powerDown(SLEEP_1S, ADC_OFF, BOD_OFF);
+      sleepTime-=1000;
+    }
+    else if (sleepTime > 512)
+    {
+      powerDown(SLEEP_500MS, ADC_OFF, BOD_OFF);
+      sleepTime-=512;
+    }
+    else if (sleepTime > 256)
+    {
+      powerDown(SLEEP_250MS, ADC_OFF, BOD_OFF);
+      sleepTime-=256;
+    }
+    else if (sleepTime > 128)
+    {
+      powerDown(SLEEP_120MS, ADC_OFF, BOD_OFF);
+      sleepTime-=128;
+    }
+    else if (sleepTime > 64)
+    {
+      powerDown(SLEEP_60MS, ADC_OFF, BOD_OFF);
+      sleepTime-=64;
+    }
+    else if (sleepTime > 32)
+    {
+      powerDown(SLEEP_30MS, ADC_OFF, BOD_OFF);
+      sleepTime-=32;
+    }
+    else if (sleepTime > 16)
+    {
+      powerDown(SLEEP_15MS, ADC_OFF, BOD_OFF);
+      sleepTime-=16;
+    }
+    else
+    {
+      sleepTime=0;
+    }
+  } while(sleepTime);
+}
+
 /*******************************************************************************
 * Name: ISR (WDT_vect)
 * Description: Watchdog Timer interrupt service routine. This routine is 
@@ -1133,7 +1193,7 @@ ISR (WDT_vect)
 }
 
 #elif defined (__arm__)
-#if defined (__SAMD21G18A__)
+#if defined (__SAMD21G18A__) || defined (__SAMD21E18A__) || defined (__SAMD21E17A__)
 /*******************************************************************************
 * Name: standby
 * Description: Putting SAMD21G18A into idle mode. This is the lowest current 
@@ -1175,7 +1235,7 @@ void	LowPowerClass::standby()
 }
 
 #else
-	#error "Please ensure chosen MCU is ATSAMD21G18A."
+	#error "Please ensure chosen MCU is a SAMD21 G18A/E18A/E17A"
 #endif
 #else
 	#error "Processor architecture is not supported."

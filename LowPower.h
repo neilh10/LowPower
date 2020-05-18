@@ -152,14 +152,15 @@ class LowPowerClass
 			void	powerSave(period_t period, adc_t adc, bod_t bod, timer2_t timer2) __attribute__((optimize("-O1")));
 			void	powerStandby(period_t period, adc_t adc, bod_t bod) __attribute__((optimize("-O1")));
 			void	powerExtStandby(period_t period, adc_t adc, bod_t bod, timer2_t timer2) __attribute__((optimize("-O1")));
+      void  longPowerDown(uint32_t sleepTime);
 		
 		#elif defined (__arm__)
 			
-			#if defined (__SAMD21G18A__)
+			#if defined (__SAMD21G18A__) || defined (__SAMD21E18A__) || defined (__SAMD21E17A__)
 				void	idle(idle_t idleMode);
 				void	standby();
 			#else
-				#error "Please ensure chosen MCU is ATSAMD21G18A."
+				#error "Please ensure chosen MCU is a SAMD21 G18A/E18A/E17A"
 			#endif
 		
 		#else
