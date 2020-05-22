@@ -119,7 +119,6 @@ class LowPowerClass
 {
 	public:
 		#if defined (__AVR__)
-		
 			#if defined (__AVR_ATmega328P__) || defined (__AVR_ATmega168__) 
 				void	idle(period_t period, adc_t adc, timer2_t timer2, 
 						     timer1_t timer1, timer0_t timer0, spi_t spi,
@@ -153,20 +152,15 @@ class LowPowerClass
 			void	powerStandby(period_t period, adc_t adc, bod_t bod) __attribute__((optimize("-O1")));
 			void	powerExtStandby(period_t period, adc_t adc, bod_t bod, timer2_t timer2) __attribute__((optimize("-O1")));
       void  longPowerDown(uint32_t sleepTime);
-		
-		#elif defined (__arm__)
-			
-			#if defined (__SAMD21G18A__) || defined (__SAMD21E18A__) || defined (__SAMD21E17A__)
+		#elif defined(__arm__)
+			#if defined(__SAMD21__)
 				void	idle(idle_t idleMode);
 				void	standby();
 			#else
-				#error "Please ensure chosen MCU is a SAMD21 G18A/E18A/E17A"
+				#error "Please ensure chosen MCU is a SAMD21"
 			#endif
-		
 		#else
-		
 			#error "Processor architecture is not supported."
-		
 		#endif
 };
 

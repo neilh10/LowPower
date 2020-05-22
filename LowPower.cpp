@@ -1192,8 +1192,8 @@ ISR (WDT_vect)
 	wdt_disable();
 }
 
-#elif defined (__arm__)
-#if defined (__SAMD21G18A__) || defined (__SAMD21E18A__) || defined (__SAMD21E17A__)
+#elif defined(__arm__)
+#if defined(__SAMD21__)
 /*******************************************************************************
 * Name: standby
 * Description: Putting SAMD21G18A into idle mode. This is the lowest current 
@@ -1235,7 +1235,7 @@ void	LowPowerClass::standby()
 }
 
 #else
-	#error "Please ensure chosen MCU is a SAMD21 G18A/E18A/E17A"
+	#error "Please ensure chosen MCU is a SAMD21"
 #endif
 #else
 	#error "Processor architecture is not supported."
