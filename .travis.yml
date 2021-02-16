@@ -10,9 +10,11 @@ cache:
 
 env:
     - PLATFORMIO_CI_SRC=Examples/powerDownWakePeriodic/powerDownWakePeriodic.ino
+    - PLATFORMIO_CI_SRC=Examples/idleWakePeriodic/idleWakePeriodic.ino
+    - PLATFORMIO_CI_SRC=Examples/powerDownWakeExternalInterrupt/powerDownWakeExternalInterrupt.ino
 
 install:
     - pip install -U platformio
 
 script:
-    - platformio ci --lib=. --board=moteino --board=moteino_zero --board=moteinomega
+    - platformio ci --lib=. --board=moteino --board=moteinomega
