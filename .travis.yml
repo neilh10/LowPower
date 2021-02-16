@@ -9,7 +9,7 @@ cache:
         - "~/.platformio"
 
 env:
-    - PLATFORMIO_CI_SRC=examples/powerDownWakePeriodic/powerDownWakePeriodic.ino
+    - PLATFORMIO_CI_SRC=Examples/powerDownWakePeriodic/powerDownWakePeriodic.ino
 
 install:
     - pip install -U platformio
