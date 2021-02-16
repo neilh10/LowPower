@@ -1,7 +1,14 @@
-### Low-Power
-Lightweight low power library for AVR/SAMD21 Moteino boards.
+# LowPower Library
+[![Build Status](https://travis-ci.com/LowPowerLab/LowPower.svg)](https://travis-ci.org/LowPowerLab/LowPower)
+[![GitHub release](https://img.shields.io/github/release/LowPowerLab/LowPower.svg)](https://github.com/LowPowerLab/LowPower)
+[![GitHub issues](https://img.shields.io/github/issues/LowPowerLab/LowPower.svg)](https://github.com/LowPowerLab/LowPower/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/LowPowerLab/LowPower.svg)](https://github.com/LowPowerLab/LowPower/pulls)
 
-Version: 1.70
+Lightweight low power library for AVR/SAMD21 Moteino boards.
+<br/>
+By Felix Rusu, [LowPowerLab.com](http://LowPowerLab.com)
+<br/>
+Forked from [Low-Power](https://github.com/rocketscream/Low-Power).
 
 Date: 08-08-2018
 
