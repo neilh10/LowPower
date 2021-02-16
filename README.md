@@ -20,4 +20,4 @@ Devices Supported:
 * ATMega1284P
 * ATMega2560
 * ATMega256RFR2
-* ATSAMD21G18A
+* ATSAMD21
