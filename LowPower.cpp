@@ -1191,7 +1191,7 @@ ISR (WDT_vect)
 }
 
 #elif defined(__arm__)
-#if defined(__SAMD21__)
+#if defined(__SAMD21__) || defined(ARDUINO_SAMD_ZERO)
 /*******************************************************************************
 * Name: standby
 * Description: Putting SAMD21G18A into idle mode. This is the lowest current

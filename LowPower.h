@@ -154,7 +154,7 @@ class LowPowerClass
 			void	powerExtStandby(period_t period, adc_t adc, bod_t bod, timer2_t timer2) __attribute__((optimize("-O1")));
       void  longPowerDown(uint32_t sleepTime);
 		#elif defined (__arm__)
-			#if defined(__SAMD21__)
+			#if defined(__SAMD21__) || defined(ARDUINO_SAMD_ZERO)
 				void	idle(idle_t idleMode);
 				void	standby();
 			#else

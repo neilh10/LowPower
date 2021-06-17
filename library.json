@@ -1,6 +1,6 @@
 {
   "name": "LowPower_LowPowerLab",
-  "version": "2.1",
+  "version": "2.2",
   "keywords": "low, power, sleep",
   "description": "Library sleeping AVR & SAMD MCUs",
   "repository":
