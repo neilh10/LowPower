@@ -1,5 +1,5 @@
 # LowPower Library
-[![Build Status](https://travis-ci.com/LowPowerLab/LowPower.svg)](https://travis-ci.com/LowPowerLab/LowPower)
+[![Build Status](https://app.travis-ci.com/LowPowerLab/LowPower.svg)](https://app.travis-ci.com/LowPowerLab/LowPower)
 [![GitHub release](https://img.shields.io/github/release/LowPowerLab/LowPower.svg)](https://github.com/LowPowerLab/LowPower)
 [![GitHub issues](https://img.shields.io/github/issues/LowPowerLab/LowPower.svg)](https://github.com/LowPowerLab/LowPower/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/LowPowerLab/LowPower.svg)](https://github.com/LowPowerLab/LowPower/pulls)
