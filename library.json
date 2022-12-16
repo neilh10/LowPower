@@ -1,12 +1,12 @@
 {
-  "name": "LowPower_LowPowerLab",
-  "version": "2.2",
+  "name": "LowPower_neilh10",
+  "version": "2.2.1-aaa",
   "keywords": "low, power, sleep",
   "description": "Library sleeping AVR & SAMD MCUs",
   "repository":
   {
     "type": "git",
-    "url": "https://github.com/LowPowerLab/LowPower.git"
+    "url": "https://github.com/neilh10/LowPower.git"
   },
   "frameworks": "arduino",
   "platforms": "atmelavr"
