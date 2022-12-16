@@ -1191,7 +1191,7 @@ ISR (WDT_vect)
 }
 
 #elif defined(__arm__)
-#if defined(__SAMD21__) || defined(ARDUINO_SAMD_ZERO)
+#if defined(__SAMD21__) || defined(ARDUINO_SAMD_ZERO) || defined(__SAMD51__) 
 /*******************************************************************************
 * Name: standby
 * Description: Putting SAMD21G18A into idle mode. This is the lowest current
@@ -1208,7 +1208,11 @@ ISR (WDT_vect)
 void	LowPowerClass::idle(idle_t idleMode)
 {
 	SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
+	#if defined(__SAMD51__) 
+	PM->SLEEPCFG.reg = idleMode;
+	#else
 	PM->SLEEP.reg = idleMode;
+	#endif 
 	__DSB();
 	__WFI();
 }
