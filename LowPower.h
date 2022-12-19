@@ -112,7 +112,14 @@ enum idle_t
 {
 	IDLE_0,
 	IDLE_1,
-	IDLE_2
+	IDLE_2 = 2,
+	#if defined(__SAMD51__)
+	SLEEP_STANDBY =4,
+	SLEEP_HIBERNATE =5, 
+	SLEEP_BACKUP =6,
+	SLEEP_ALL_OFF =7  
+	#endif 
+
 };
 
 class LowPowerClass
