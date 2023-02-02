@@ -6,10 +6,10 @@ Based on Examples in https://github.com/LowPowerLab/LowPower
 For upload, double press the reset line to put into boot.
 
 user interface is 
-a) LED - flashes at various stages of 
+a) Blue LED - flashes at various stages of 
 b) print via UART_TXRX or USB
 
-Create options for measuring current via an external method
+This program create options for measuring current via an external method
 eg USB Current meter with no battery
 more accurately a current device on battery
 
@@ -21,7 +21,6 @@ Ardafruit M4 Express
 PRINT_WITH_TXRX requires FTDI (or similar) connected - 
     3 wires afM4:FTDI ==> GND:GND TX:RX RX:TX
 
-First Pass Testing,
 
 When it sleeps still has others running
  for complete POWER_OFF ~ less than 0.1mA, measurement error at limit of method
@@ -31,6 +30,19 @@ When it sleeps still has others running
                     48Mhz   11mA-->4.4MA with USB, sleeps, wakes
                     48Mhz    3.3-->1.3mA  with Uart TxRx  
                     12Mhz    1.6mA ~ but freezes somewhere, probably USBCON init
+
+
+WIO Terminal
+USB +5V always has weak Green LED on, current unknown likely to be ~200uA
+XOU/XIN 32?Hz & 32Mhz (Xtal=306010026) 
+Startup with LCD and RTL820 off, no microSD in slot
+                        Wake-->Sleep
+for SLEEP_STANDBY 48MHz 18mA -->11mA with USB
+for SLEEP_STANDBY 48MHz 11mA --> 5.5mA SERIAL1/FTDI
+
+Circuit ANalysis - USB_5V ~ MP2161GJ buck VCC_3V3  IQ=17uA very good
+    LED1 GREEN Pwr - always On - naughty 
+
 
 Arduino BSP Flow of control on start up,
 interrupts enabled 
@@ -46,14 +58,28 @@ main.cpp-->main() init() initVariant() USBDevice.attach() setup() {loop(),yield(
 wiring.c:init()
 SysTick - 1MS
 
-From Variant.h 
- * PB16 SAMD51 SERCOM5/PAD[1] Rx - FTDI Pin4 Orange 
- * PB16 SAMD51 SERCOM5/PAD[0] Tx - FTDI Pin5 Yellow 
+From \.platformio\packages\framework-arduino-samd-adafruit\variants\feather_m4\Variant.h\cpp
+ * PB16 SAMD51 SERCOM5/PAD[1] Rx WioPin10 -WwWhite- FTDI Pin4 Orange 
+ * PB16 SAMD51 SERCOM5/PAD[0] Tx WioPin8  -WwRed  - FTDI Pin5 Yellow
+ * GND WioPin6                     - WireWrapGreen- FTDI Pin1 Black 
  * SERCOM5 to Serial1
+
+
+From \.platformio\packages\framework-arduino-samd-adafruit\variants\feather_m4\Variant.h\cpp 
+#define PIN_SERIAL1_RX (41ul)
+#define PIN_SERIAL1_TX (40ul)
+ * PB27 SAMD51 SERCOM2/PAD[1] Rx - FTDI Pin4 Orange 
+ * PB26 SAMD51 SERCOM2/PAD[0] Tx - FTDI Pin5 Yellow 
+ * SERCOM2(alt SERCOM4) to Serial1
 */
 #include "Arduino.h"
 #include "LowPower.h"
 #include "RTC_SAMD51.h"
+#if defined WIO_TERMINAL
+//#include <rpcWiFi.h>
+//#include <SPI.h>
+//#include "TFT_eSPI.h"
+#endif //WIO_TERMINAL
 
 // ** CHARACTERIZATION ** MODIFY FOR TESTING ***
 
@@ -64,7 +90,7 @@ From Variant.h
 // PRINT_DETAILS 0 - not print including setup information ** not going to sleep
 // PRINT_DETAILS 1 - state information
 // PRINT_DETAILS 2 - internal information
-#define PRINT_DETAILS 1
+#define PRINT_DETAILS 2
 #define PRINT_WITH_TXRX 1
 #define SERIAL_TTY_BAUD 115200
 
@@ -78,6 +104,9 @@ extern const String build_ref = "a\\" __FILE__ " " __DATE__ " " __TIME__ " ";
 #define LED_RED 13
 #define LED1 LED_RED
 
+#if defined WIO_TERMINAL
+#define LCD_BACKLIGHT (72Ul) // Control Pin of LCD
+#endif //WIO_TERMINAL
 // CPU clock can be varied 120MH-->48Mhz
 // platformio  none default - 120MHz
 // board_build.f_cpu= 48000000L for 48MHz
@@ -116,6 +145,93 @@ void updateAlarm(int update_secs);
 
 void setup()
 {
+#if defined WIO_TERMINAL
+#warning compiling for WIO_TERMINAL
+  // in ordfder of variant.h 
+  // LED
+  // TX/RX - can be switched with ROLE
+  // Digital and Analog Arduino pins
+  // RPI BCM Connector - no action
+  // FPC Connector - no action 
+  // RPI Analog Iverlay - no action
+  // USB - PIN_USB_HOST_ENABLE (for power)
+  //Button_1 _2 _3 - cct pullup 4.7K  no action
+  //SWITCH_X _Z _Y  _B _U pulled up 100K - no action
+
+  // IRQ0  PC20 From RTL8720D - 
+  pinMode(IRQ0,  INPUT_PULLUP); //?
+  //Buzzer_CTR - Output control, Q4 driver, pulled down
+  //pinMode(BUZZER_CTR,  INPUT_PULLDOWN);
+
+  //MIC_INPUT - no action
+
+  //GCLK - debug leave
+  //Serial1 sercom2
+  //Serial2 sercon1
+  // I2C WIRE sercom3 - pulled up ext
+  // I2C WIRE1 sercom4 -pulled up?
+  //    GYROSCOPE - no external pull U5 LIS3DHTR PIN_WRE1_SCL _SDA 
+  //  
+  //pinMode(GYROSCOPE_INT1,  INPUT_PULLUP); // Push-Pull - no action 
+
+  // micro SD socket 
+  //SDCARD_SPI/SPI2  _SCK_PIN _SS_PIN _MOSI  _MISO _DET
+  //  SDCARD_DET_PIN is pulled high with 100K
+  pinMode(SDCARD_SS_PIN,  INPUT_PULLUP);
+  pinMode(SDCARD_DET_PIN,  INPUT);
+
+  //LCD
+  //SPI LCD_SCK _CS  _MOSI_ MISOC  
+  //    LCD_D/C 
+  //    LCD_RESET  - Pulled hihg 4.7K
+  //    LCD_BACKLIGHT=LOW  off
+
+  pinMode(LCD_SS_PIN,   INPUT_PULLUP);
+  pinMode(LCD_SCK_PIN,  INPUT_PULLDOWN);
+  pinMode(LCD_MISO_PIN, INPUT_PULLDOWN);
+  pinMode(LCD_MOSI_PIN, INPUT_PULLDOWN);
+  pinMode(LCD_RESET,    INPUT);
+  //Something causes to go from 6.0 to 6.5mA
+  /*pinMode(LCD_DC,       INPUT_PULLDOWN); //??
+  pinMode(LCD_XL,       INPUT_PULLDOWN);  
+  pinMode(LCD_YU,       INPUT_PULLDOWN);  
+  pinMode(LCD_XR,       INPUT_PULLDOWN);  
+  pinMode(LCD_YD,       INPUT_PULLDOWN); /* */
+
+  pinMode(LCD_BACKLIGHT, OUTPUT);
+  digitalWrite(LCD_BACKLIGHT, LOW);
+
+  //Turn off WiFi RTL8720D_CHIP_PU = LOW
+  pinMode(RTL8720D_CHIP_PU, OUTPUT);
+  
+  digitalWrite(RTL8720D_CHIP_PU, LOW);
+  // For power off, should other pins be low
+  // RTL8720D_TXD _RXD
+  // RTL8720D_SPI  _MISO_PIN _MOSI_PIN _SCK_PIN _SS_PIN  
+  //RTL8720D_GPIO0    //low
+
+  //QSPI  W25Q32JVZPIM
+  // PIN_QSPI_CS _SCK _IO0  _IO1 _IO2 _IO3
+  // PIN_QSPI_CS  should be high, 
+  pinMode(PIN_QSPI_CS,  INPUT_PULLUP);
+  // others are high impedance, so could pulled weakly low to hold them
+  pinMode(PIN_QSPI_SCK, INPUT_PULLDOWN);
+  pinMode(PIN_QSPI_IO0, INPUT_PULLDOWN);
+  pinMode(PIN_QSPI_IO1, INPUT_PULLDOWN);
+  pinMode(PIN_QSPI_IO2, INPUT_PULLDOWN);
+  pinMode(PIN_QSPI_IO3, INPUT_PULLDOWN);
+
+  //I2S sent to RPI - not used
+  //Light sensor - input normally pulled low through 10K
+  //ir sensors - output pulled low 
+
+ //U11 ATECC608/DNP  I2C0_SCL _SDA 
+ 
+//Power SW for RPI IO - outputs pulled low.
+//OUTPUT_CTR_5V 
+//OUTPUT_CTR_3V3
+
+#endif //WIO_TERMINAL
   //Simple user interface
   pinMode(LED1, OUTPUT);
   digitalWrite(LED1, HIGH);
