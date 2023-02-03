@@ -1,3 +1,11 @@
+This puts a SAMD51 to sleep, and the wakes it with the internal RTC every minute.   
+Ihas been coded for two boards with SAMD51   
+- Adafruit Express M4   
+- Seeed Wio Terminal   
+It use platformio that puts its configuration in platformio.ini   
+The clock speed can be configured from 120Mhz to 48Hz.  
+The serial can use the buildin USB, or external serial1 Tx Rx on each board    
+
 # Low Power Serial1 to Ftdi cable 
 
 To reduce power to the minimium in SLEEP, the USB is switched off and output is via the Serial Tx Rx pins.    
