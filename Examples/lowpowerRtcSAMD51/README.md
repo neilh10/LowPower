@@ -9,10 +9,10 @@ See mapping of FTDI cable connector to Express M4 labeled pins.
 I use wire-wrap wire to make the links.
 
 Ftdi   
-6pin /FeatherM4   
-1 – GND Feather   
-4 - Rxd Feather   
-5  -Txd Feather   
+6pin     /FeatherM4   
+Black  1 – GND Feather   
+Yellow 4 - Rxd Feather   
+Orange 5  -Txd Feather   
 
 <picture>
  <img alt="board support hole dimensions" src="diagrams/afm4_wiring graphic.jpg">
@@ -23,11 +23,11 @@ Ftdi
 I used a right angle 6pin 0.1" to connect to the Wio T 40pin connector.
 I use wire-wrap wire to make the links.    
 
-FTDI/Wio Terminal 
-6pin/  40pin 
-1 – 6/GND WioT    
-4 – 10/Rxd WioT    
-5 -  8/Txd WioT   
+FTDI    /Wio Terminal    
+6pin    /  40pin    
+Black  1 – 6/GND WioT    
+Yellow 4 – 10/Rxd WioT    
+Orange 5 -  8/Txd WioT   
 
 <picture>
  <img alt="board support hole dimensions" src="diagrams/wioterm_wiring graphic.jpg">
