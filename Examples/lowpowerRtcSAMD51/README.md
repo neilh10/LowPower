@@ -11,8 +11,8 @@ I use wire-wrap wire to make the links.
 Ftdi   
 6pin     /FeatherM4   
 Black  1 – GND Feather   
-Yellow 4 - Rxd Feather   
-Orange 5  -Txd Feather   
+Orange 4 - Rxd Feather   
+Yellow 5  -Txd Feather   
 
 <picture>
  <img alt="board support hole dimensions" src="diagrams/afm4_wiring graphic.jpg">
@@ -26,8 +26,8 @@ I use wire-wrap wire to make the links.
 FTDI    /Wio Terminal    
 6pin    /  40pin    
 Black  1 – 6/GND WioT    
-Yellow 4 – 10/Rxd WioT    
-Orange 5 -  8/Txd WioT   
+Orange 4 – 10/Rxd WioT    
+Yellow 5 -  8/Txd WioT   
 
 <picture>
  <img alt="board support hole dimensions" src="diagrams/wioterm_wiring graphic.jpg">
