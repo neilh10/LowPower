@@ -1,6 +1,6 @@
 # Low Power Serial1 to Ftdi cable 
 
-To reduce power to the minimium in SLEEP, the USB is switched off and output is via the Serial Tx Rx pins.
+To reduce power to the minimium in SLEEP, the USB is switched off and output is via the Serial Tx Rx pins.    
 An FTDI cable (partnumber TTL-232R-3V3 ) - USB to 6pin 3.3V can be used for connecting on the serial.   
 
 
