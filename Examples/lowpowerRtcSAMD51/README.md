@@ -5,7 +5,9 @@ An FTDI cable (partnumber TTL-232R-3V3 ) - USB to 6pin 3.3V can be used for conn
 
 
 # Adafruit Express M4 Serial1 Tx Rx  to FTDI wiring 
-- See mapping of FTDI cable connector to Express M4 labeled pins.    
+See mapping of FTDI cable connector to Express M4 labeled pins.    
+I use wire-wrap wire to make the links.
+
 Ftdi   
 6pin /FeatherM4   
 1 – GND Feather   
@@ -18,6 +20,8 @@ Ftdi
 
 # Seeed Wio Terminal Serial1 Tx Rx  to FTDI wiring 
  See mapping of FTDI Cable connector to Wio Terminal pins 6 8 10.    
+I used a right angle 6pin 0.1" to connect to the Wio T 40pin connector.
+I use wire-wrap wire to make the links.    
 
 FTDI/Wio Terminal 
 6pin/  40pin 
