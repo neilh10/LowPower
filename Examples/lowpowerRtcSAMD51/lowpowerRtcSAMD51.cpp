@@ -145,6 +145,14 @@ void updateAlarm(int update_secs);
 
 void setup()
 {
+  /*32.5.2 On Reset, all PORT lines are configured as inputs with input buffers, 
+  On BACKUP sleep mode, 
+  even if the PORT configuration registers and input synchronizers will lose their contents 
+  (these will not be restored when PORT is powered up again), 
+  the latches in the pads will keep their current configuration, 
+  such as the output value and pull settings
+  The PORT peripheral will continue operating in any Sleep mode where its source clock is running.
+  */
 #if defined WIO_TERMINAL
 #warning compiling for WIO_TERMINAL
   // in ordfder of variant.h 
@@ -311,7 +319,6 @@ void setup()
 
   delay(100);
 #endif //  PRINT_DETAILS > 1
-  DWT->CTRL &= ~DWT_CTRL_CYCCNTENA_Msk;
 
 #if PRINT_DETAILS > 1
 
@@ -342,6 +349,14 @@ void setup()
   delay(100);
   digitalWrite(LED1, LOW);
   count = 0;
+
+  
+ //Data Watchpoint and Trace Unit - 
+ // Seperate core arm_cortexm4_processor_trm_100166_0001_00_en Technical Ref Manual.pdf
+ // Turn off free running Cycle Count Register in DWT_CTRL
+ // May be a problem for some debug
+  DWT->CTRL &= ~DWT_CTRL_CYCCNTENA_Msk;
+  
 } //setup()
 
 void loop()
