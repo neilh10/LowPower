@@ -1,8 +1,11 @@
+# Overview lowpowerRtcSAMD51.cpp
 This puts a SAMD51 to sleep, and the wakes it with the internal RTC every minute.   
-Ihas been coded for two boards with SAMD51   
+It has been coded for two boards with SAMD51   
 - Adafruit Express M4   
 - Seeed Wio Terminal   
+
 It use platformio that puts its configuration in platformio.ini   
+The platform can be selected in platform.ini    
 The clock speed can be configured from 120Mhz to 48Hz.  
 The serial can use the buildin USB, or external serial1 Tx Rx on each board    
 
