@@ -127,12 +127,12 @@ extern const String build_ref = "a\\" __FILE__ " " __DATE__ " " __TIME__ " ";
 #endif //F_CPU
 
 #if defined PRINT_WITH_TXRX
-#define SerialTty Serial1
+#define SerialStd Serial1
 //#undef RUN_WITH_USB
 #elif defined RUN_WITH_USB
-#define SerialTty Serial
+#define SerialStd Serial
 #else
-#define SerialTty Serial
+#define SerialStd Serial
 #endif // PRINT_WITH_TXRX
 
 // Internal Physical RTC and definitions
@@ -256,7 +256,7 @@ void setup()
 
 #if PRINT_DETAILS > 0
   // Wait for serial (possibly USB) port to open
-  SerialTty.begin(SERIAL_TTY_BAUD);
+  SerialStd.begin(SERIAL_TTY_BAUD);
 #if defined RUN_WITH_USB
   delay(100);
   count = 500;
@@ -278,23 +278,23 @@ void setup()
 
 #endif //RUN_WITH_USB
 
-  SerialTty.println(F("\n\n---Boot Sw Build: "));
-  SerialTty.println(build_ref);
-  SerialTty.print("  ***** Low Power RTC SAMD51 ");
-  SerialTty.print(F_CPU);
-  SerialTty.print("MHz ***** ");
+  SerialStd.println(F("\n\n---Boot Sw Build: "));
+  SerialStd.println(build_ref);
+  SerialStd.print("  ***** Low Power RTC SAMD51 ");
+  SerialStd.print(F_CPU);
+  SerialStd.print("MHz ***** ");
 #if defined RUN_WITH_USB
-  SerialTty.print("USB");
+  SerialStd.print("USB");
 #else
-  SerialTty.print("UART UsbDis=");
-    SerialTty.print(statusUsb);
+  SerialStd.print("UART UsbDis=");
+  SerialStd.print(statusUsb);
 #endif // RUN_WITH_USB
 #endif // PRINT_DETAILS
 
   if (!rtcIntPhy.begin())
   {
 #if PRINT_DETAILS > 0
-    SerialTty.println("Couldn't find RTC -halting");
+    SerialStd.println("Couldn't find RTC -halting");
 #endif // PRINT_DETAILS
     while (1)
     {
@@ -306,13 +306,13 @@ void setup()
   updateAlarm(ALARM_UPDATE_SEC);
 
 #if PRINT_DETAILS > 0
-  SerialTty.println("\n\rSet Alarm, starting in:");
+  SerialStd.println("\n\rSet Alarm, starting in:");
 #endif // PRINT_DETAILS
   for (count = COUNT_DOWN; count > 0; count--)
   {
 #if PRINT_DETAILS > 0
-    SerialTty.print(count);
-    SerialTty.println(" s");
+    SerialStd.print(count);
+    SerialStd.println(" s");
 #endif // PRINT_DETAILS
     digitalWrite(LED1, count & 0x01);
     delay(1000);
@@ -328,36 +328,36 @@ void setup()
 
 #if PRINT_DETAILS > 1
   uint32_t nvicPriority = NVIC_GetPriorityGrouping();
-  SerialTty.print("NVIC ");
-  SerialTty.println(nvicPriority);
+  SerialStd.print("NVIC ");
+  SerialStd.println(nvicPriority);
 
   delay(100);
 #endif //  PRINT_DETAILS > 1
 
 #if PRINT_DETAILS > 1
 
-  SerialTty.print("Alm ");
+  SerialStd.print("Alm ");
   //SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.reg,HEX);
   print_rtc_time_field(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.reg);
-  SerialTty.print(" Match ");
+  SerialStd.print(" Match ");
   //SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.reg,HEX);
-  SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].MASK.bit.SEL, HEX);
+  SerialStd.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].MASK.bit.SEL, HEX);
 
-  SerialTty.print(" Ctl ");
-  SerialTty.print(RTC->MODE2.CTRLA.reg, HEX);
-  SerialTty.println();
-  SerialTty.print("Check actIRQ:");
+  SerialStd.print(" Ctl ");
+  SerialStd.print(RTC->MODE2.CTRLA.reg, HEX);
+  SerialStd.println();
+  SerialStd.print("Check actIRQ:");
   int intlp;
   for (intlp = 0; intlp < PERIPH_COUNT_IRQn; intlp++)
   {
     if (NVIC_GetEnableIRQ((IRQn_Type)intlp))
     {
-      SerialTty.print(" ");
-      SerialTty.print(intlp);
+      SerialStd.print(" ");
+      SerialStd.print(intlp);
     }
   }
-  SerialTty.print(" TotChecked=");
-  SerialTty.println(intlp);
+  SerialStd.print(" TotChecked=");
+  SerialStd.println(intlp);
 #endif //PRINT_DETAILS
 
   delay(100);
@@ -377,9 +377,9 @@ void loop()
 {
 //int irq_mapping ;
 #if PRINT_DETAILS > 0
-  SerialTty.println("Entering sleep standby mode.");
-  SerialTty.println("RTC enabled  to wake the processor.");
-  SerialTty.println("Zzzz...");
+  SerialStd.println("Entering sleep standby mode.");
+  SerialStd.println("RTC enabled  to wake the processor.");
+  SerialStd.println("Zzzz...");
   delay(10);
 #endif //PRINT_DETAILS
 
@@ -421,9 +421,9 @@ void loop()
   count++;
 #if PRINT_DETAILS > 0
   delay(200);
-  SerialTty.print(count);
-  SerialTty.print(":Awake ");
-  SerialTty.println(alarmUpdate_sema);
+  SerialStd.print(count);
+  SerialStd.print(":Awake ");
+  SerialStd.println(alarmUpdate_sema);
   alarmUpdate_sema = false;
 #endif                  // PRINT_DETAILS
   delay(2000);          //Allow 2secs measurement time
@@ -437,8 +437,8 @@ void loop()
 void lowpower_disable_ints(void)
 {
 #if PRINT_DETAILS > 0
-  SerialTty.flush();
-  SerialTty.end();
+  SerialStd.flush();
+  SerialStd.end();
 #endif // PRINT_DETAILS
 
   SysTick->CTRL &= ~(SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk);
@@ -469,7 +469,7 @@ void lowpower_enable_ints(void)
   SysTick_Config(SystemCoreClock / 1000);
 #if PRINT_DETAILS > 0 //defined PRINT_WITH_TXRX
   //MCLK->APBDMASK.reg |=  MCLK_APBDMASK_SERCOM5;
-  SerialTty.begin(SERIAL_TTY_BAUD);
+  SerialStd.begin(SERIAL_TTY_BAUD);
 #endif
 } // lowpower_enable_ints
 
@@ -506,17 +506,17 @@ void print_rtc_time_field(uint32_t time_value)
 #if PRINT_DETAILS > 0
   //SerialTtyprint("Time ");
   // Doesn't like this RtcMode2Alarm rtc_mode2alm = RTC->MODE2.Mode2Alarm[RTC_ALM_ID];
-  SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.YEAR);
-  SerialTty.print("/");
-  SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.MONTH);
-  SerialTty.print("/");
-  SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.DAY);
-  SerialTty.print(" ");
-  SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.HOUR);
-  SerialTty.print(":");
-  SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.MINUTE);
-  SerialTty.print(":");
-  SerialTty.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.SECOND);
+  SerialStd.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.YEAR);
+  SerialStd.print("/");
+  SerialStd.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.MONTH);
+  SerialStd.print("/");
+  SerialStd.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.DAY);
+  SerialStd.print(" ");
+  SerialStd.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.HOUR);
+  SerialStd.print(":");
+  SerialStd.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.MINUTE);
+  SerialStd.print(":");
+  SerialStd.print(RTC->MODE2.Mode2Alarm[RTC_ALM_ID].ALARM.bit.SECOND);
 #endif // PRINT_DETAILS
 
 } //  print_rtc_time_field(
@@ -524,14 +524,14 @@ void print_rtc_time_field(uint32_t time_value)
 void print_mclk(void)
 {
 #if PRINT_DETAILS > 1
-  SerialTty.print("MCLK ");
-  SerialTty.print(MCLK->APBAMASK.reg, HEX);
-  SerialTty.print(" ");
-  SerialTty.print(MCLK->APBBMASK.reg, HEX);
-  SerialTty.print(" ");
-  SerialTty.print(MCLK->APBCMASK.reg, HEX);
-  SerialTty.print(" ");
-  SerialTty.println(MCLK->APBDMASK.reg, HEX);
+  SerialStd.print("MCLK ");
+  SerialStd.print(MCLK->APBAMASK.reg, HEX);
+  SerialStd.print(" ");
+  SerialStd.print(MCLK->APBBMASK.reg, HEX);
+  SerialStd.print(" ");
+  SerialStd.print(MCLK->APBCMASK.reg, HEX);
+  SerialStd.print(" ");
+  SerialStd.println(MCLK->APBDMASK.reg, HEX);
   delay(100); //Let print finish
 #endif        // PRINT_DETAILS
 } // print_mclk
