@@ -93,6 +93,16 @@ From \.platformio\packages\framework-arduino-samd-adafruit\variants\feather_m4\V
 #define PRINT_DETAILS 2
 #define PRINT_WITH_TXRX 1
 #define SERIAL_TTY_BAUD 115200
+// Note : This module can be configured to be for AF4 or WioTerminal 
+// There are two types of USB Drivers, and for TinyUSB two variants
+// framework-arduino-samd-adafruit\cores\arduino\mmain.cpp 
+// framework-arduino-samd-seeed\cores\arduino\main.cpp 
+// These are USE_TINYUSB and USBCON
+//  USE_TINYUSB is initialized slightly differently between the two
+// Adafruit Express M4 uses USBCON --? alternate TinyUSB_Device_Init(0)
+// Seeed Wio Terminal use TINYUSB Adafruit_TinyUSB_Core_init();tinyusb_task();
+//
+//
 
 /// **** DON'T CHANGE DEFINES BELOW   *****
 
@@ -260,9 +270,12 @@ void setup()
   delay(100);
 #else
 //Ensure USB is removed
-#warning No USB
-  USBDevice.detach();
+#warning USB Disabled
+  bool statusUsb=false;
+  statusUsb = USBDevice.detach();
   Serial.end();
+  statusUsb &= USBDevice.end();
+
 #endif //RUN_WITH_USB
 
   SerialTty.println(F("\n\n---Boot Sw Build: "));
@@ -273,7 +286,8 @@ void setup()
 #if defined RUN_WITH_USB
   SerialTty.print("USB");
 #else
-  SerialTty.print("UART");
+  SerialTty.print("UART UsbDis=");
+    SerialTty.print(statusUsb);
 #endif // RUN_WITH_USB
 #endif // PRINT_DETAILS
 
